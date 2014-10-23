@@ -86,8 +86,11 @@ class LaravelHtmlMinifyCompiler extends BladeCompiler
 				}
 				return $m[1].'='.$m[2];
 			}, $value);
+
+			// clean spaces
+			$value = preg_replace('%\ {2,}%u', ' ', $value);
 		}
-		
+
 		return $value;
     }
 
