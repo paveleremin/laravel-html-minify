@@ -74,9 +74,19 @@ class LaravelHtmlMinifyCompiler extends BladeCompiler
                 "/ +/"                      => ' ',
             );
 
-            return preg_replace(
+            $value = preg_replace(
                 array_keys($replace), array_values($replace), $value
             );
+
+			$value = str_replace('value=""', '', $value);
+			$value = str_replace('=""', '', $value);
+			$value = preg_replace_callback('%(.*?)=\"(.*?)\"%', function ($m) {
+				if (mb_strpos($m[2], 'php') !== false || mb_strpos($m[2], ' ') !== false) {
+					return $m[0];
+				}
+				return $m[1].'='.$m[2];
+			}, $value);
+
         } else {
             return $value;
         }
